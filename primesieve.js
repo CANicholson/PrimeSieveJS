@@ -3,12 +3,11 @@ function primegen(expectedprimes){
     var primes = []; //Initially empty so we don't add 2 twice
     //while (primes.length != expectedprimes){
         var tf = new Array();
-            for(i = 2; i<=upperlimit; i++){
+            for(i = 2; i<=upperlimit; i++)
             tf.push(true);
-            }
             for (i = 2; i<=Math.sqrt(upperlimit); i++){
                 if (tf[i]){
-                    for (j = i*i; j <= upperlimit; j++){
+                    for (j = i*i; j <= upperlimit; j += i){
                         tf[j] = false;
                     }         
                 primes.push(i);

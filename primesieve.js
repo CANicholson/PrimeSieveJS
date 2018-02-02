@@ -39,7 +39,6 @@ function primegen(expectedprimes){
     }
 }
 
-var prime;
 const readline = require('readline');
 const rl = readline.createInterface({
     input: process.stdin,
@@ -54,9 +53,18 @@ rl.question('How many primes would you like? ', function (answer) {
 });
 
 outside = function(){
-    prime = primegen(parseInt(expectedprimes));
-    console.log(prime);
+    var prime = primegen(parseInt(expectedprimes));
+    var table = [];
+    for(i = 0; i<= prime.length-1; i++){
+        table[i] = [];
+        table[i][0] = prime[i];
+        table[0][i] = prime[i];
+        for(j = 1; j<= prime.length-1; j++){
+            table[i][j] = prime[i] * prime[j-1];
+        }
+    }
+    console.log(table);
     var end = new Date().getTime();
     var totalTime = end - start;
-    console.log(totalTime/1000);
+    console.log(totalTime/1000 + " seconds");
 }

@@ -1,41 +1,62 @@
+var start;
 function primegen(expectedprimes){
-    var upperlimit = 100; //This will be incremented until we find our expected number of primes
+    start = new Date().getTime();
+    var upperlimit = 10000; //This will be incremented until we find our expected number of primes
     var primes = []; //Initially empty so we don't add 2 twice
-    var lastnumber = 2;
-    var past1stsegment = false;
+    var lastnumber = 2; //Since 0 and 1 are not pimes its easiest to start from 2, this will be used for updating segments
+    //Between upperlimit and lastnumber we create the range of each segment
+    var past1stsegment = false; //Used to figure out if we need to enter a new for loop which elminates non-primes from the next segment based on the primes already in our array
+    var tf = new Array(); //holds booleans to track whether a number is a prime or not
     while (primes.length != expectedprimes){
-            var tf = new Array();
-
             for(i = lastnumber; i<=upperlimit; i++){
-            if (i == 2 || i%2 != 0) //Optimise by only adding odds
+            if (i == 2 || i%2 != 0) //Optimise by only making odds and 2 true to begin with
                 tf[i] = true;
             else
                 tf[i] = false;
             }
-            if(past1stsegment){
+            if(past1stsegment){ //Eliminates non-primes from the current segment based on the primes we already have 
                 for (i = 0; i<=primes.length; i++){
-                    for (j = primes[i]*primes[i]; j <= upperlimit; j += primes[i]){
+                    var targetIndex = ((Math.floor(lastnumber/primes[i])*primes[i])-lastnumber);
+                    if(targetIndex < 0) targetIndex += primes[i];
+                    for (j = targetIndex; j <= upperlimit; j += primes[i]){
                         tf[j] = false;
                     }     
                 }
             }
-            for (i = lastnumber; i<=upperlimit; i++){
+            for (i = lastnumber; i<=upperlimit; i++){ //Sieve of eranthonses
                 if (tf[i]){
                     for (j = i*i; j <= upperlimit; j += i){
                         tf[j] = false;
                     }     
                 primes.push(i);
                 }
-            if (primes.length == expectedprimes) //program breaks when the expected # of primes is found
+            if (primes.length == expectedprimes) //program returns when the expected # of primes is found
                 return primes;
         }
         past1stsegment = true;
         lastnumber = tf.length -1;
-        upperlimit += 100;
+        upperlimit += 10000;
     }
 }
 
-var expectedprimes = 50;
+var prime;
+const readline = require('readline');
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+  
+var expectedprimes;
+rl.question('How many primes would you like? ', function (answer) {
+    expectedprimes = answer;
+    outside();
+    rl.close();
+});
 
-var prime = primegen(expectedprimes);
-console.log(prime);
+outside = function(){
+    prime = primegen(parseInt(expectedprimes));
+    console.log(prime);
+    var end = new Date().getTime();
+    var totalTime = end - start;
+    console.log(totalTime/1000);
+}

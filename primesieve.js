@@ -6,8 +6,8 @@ function primegen(expectedprimes){
     var lastnumber = 2; //Since 0 and 1 are not pimes its easiest to start from 2, this will be used for updating segments
     //Between upperlimit and lastnumber we create the range of each segment
     var past1stsegment = false; //Used to figure out if we need to enter a new for loop which elminates non-primes from the next segment based on the primes already in our array
-    var tf = new Array(); //holds booleans to track whether a number is a prime or not
     while (primes.length != expectedprimes){
+        var tf = []; //Flush array each time to lower amount of checks
             for(i = lastnumber; i<=upperlimit; i++){
             if (i == 2 || i%2 != 0) //Optimise by only making odds and 2 true to begin with
                 tf[i] = true;
@@ -54,16 +54,25 @@ rl.question('How many primes would you like? ', function (answer) {
 
 outside = function(){
     var prime = primegen(parseInt(expectedprimes));
-    var table = [];
+    var primearray =[];
+    var Table = require('cli-table');
+    var multiplication = new Table({
+        chars: { 'top': '' , 'top-mid': '' , 'top-left': '' , 'top-right': ''
+        , 'bottom': '' , 'bottom-mid': '' , 'bottom-left': '' , 'bottom-right': ''
+        , 'left': '' , 'left-mid': '' , 'mid': '' , 'mid-mid': ''
+        , 'right': '' , 'right-mid': '' , 'middle': ' ' },
+        style: { 'padding-left': 0, 'padding-right': 0 }
+    })
     for(i = 0; i<= prime.length-1; i++){
-        table[i] = [];
-        table[i][0] = prime[i];
-        table[0][i] = prime[i];
+        primearray[i] = [];
+        primearray[i][0] = prime[i];
+        primearray[0][i] = prime[i];
         for(j = 1; j<= prime.length-1; j++){
-            table[i][j] = prime[i] * prime[j-1];
+            primearray[i][j] = prime[i] * prime[j-1];
         }
+        multiplication.push(primearray[i]);
     }
-    console.log(table);
+    console.log(multiplication.toString());
     var end = new Date().getTime();
     var totalTime = end - start;
     console.log(totalTime/1000 + " seconds");

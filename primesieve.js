@@ -1,3 +1,4 @@
+
 var start;
 function primegen(expectedprimes){
     start = new Date().getTime();
@@ -63,7 +64,8 @@ outside = function(){
         , 'right': '' , 'right-mid': '' , 'middle': ' ' },
         style: { 'padding-left': 0, 'padding-right': 0 }
     })
-
+    var fs = require('fs');
+    fs.unlinkSync('results.txt');
     for(i = 0; i<= prime.length; i++){
         primearray[i] = [];
         for(j = 0; j<= prime.length; j++){
@@ -76,6 +78,7 @@ outside = function(){
             else primearray[i][j] = prime[i-1] * prime[j-1];
         }
         multiplication.push(primearray[i]);
+        fs.appendFileSync("results.txt", primearray[i]+"\r\n");
     }
     console.log(multiplication.toString());
     var end = new Date().getTime();

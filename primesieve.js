@@ -63,12 +63,17 @@ outside = function(){
         , 'right': '' , 'right-mid': '' , 'middle': ' ' },
         style: { 'padding-left': 0, 'padding-right': 0 }
     })
-    for(i = 0; i<= prime.length-1; i++){
+
+    for(i = 0; i<= prime.length; i++){
         primearray[i] = [];
-        primearray[i][0] = prime[i];
-        primearray[0][i] = prime[i];
-        for(j = 1; j<= prime.length-1; j++){
-            primearray[i][j] = prime[i] * prime[j-1];
+        for(j = 0; j<= prime.length; j++){
+            if( i == 0 && j==0) primearray[i][j] = 0;
+
+            else if (i==0) primearray[i][j] = prime[j-1];
+
+            else if (i>0 && j==0) primearray[i][j] = prime[i-1];
+
+            else primearray[i][j] = prime[i-1] * prime[j-1];
         }
         multiplication.push(primearray[i]);
     }
